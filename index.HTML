@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Vidéo IA - 100% Gratuit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 150px;
+            transition: border 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .settings-section {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .settings-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .setting-item label {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .range-value {
+            display: inline-block;
+            margin-left: 10px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .image-selection {
+            display: none;
+            margin-bottom: 30px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .image-option {
+            border: 3px solid transparent;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .image-option:hover {
+            transform: scale(1.05);
+        }
+
+        .image-option.selected {
+            border-color: #10b981;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .image-option .checkmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .image-option.selected .checkmark {
+            display: flex;
+        }
+
+        .image-label {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .style-realistic { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .style-cartoon { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .style-anime { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .style-3d { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .style-paint { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+        .style-cyber { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .video-preview {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .video-container {
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        #videoCanvas {
+            width: 100%;
+            max-height: 500px;
+            display: block;
+        }
+
+        .inspiration-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            margin: 20px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .story-option {
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .story-option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .story-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .progress-bar {
+            display: none;
+            width: 100%;
+            height: 30px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .feature-info {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #10b981;
+        }
+
+        .feature-info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            color: #666;
+        }
+
+        .feature-list li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .subtitle-display {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .audio-control {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center;">
+            <span class="badge">🎉 100% GRATUIT - SANS CLÉ API</span>
+        </div>
+        
+        <h1>🎬 Générateur de Vidéo IA</h1>
+        <p class="subtitle">Créez des vidéos magiques instantanément - Entièrement gratuit !</p>
+
+        <div class="feature-info">
+            <h3>✨ Fonctionnalités Gratuites</h3>
+            <ul class="feature-list">
+                <li>Génération de vidéo animée automatique</li>
+                <li>6 styles visuels personnalisables</li>
+                <li>Synthèse vocale intégrée (navigateur)</li>
+                <li>Sous-titres synchronisés automatiques</li>
+                <li>Téléchargement direct de la vidéo</li>
+                <li>Aucune inscription requise</li>
+                <li>Aucun paiement - 100% gratuit</li>
+            </ul>
+        </div>
+
+        <!-- Section de saisie -->
+        <div class="input-section">
+            <label for="storyInput">📝 Votre Histoire :</label>
+            <textarea id="storyInput" placeholder="Décrivez votre histoire ici... Par exemple : 'Un astronaute découvre une planète remplie de créatures lumineuses...'"></textarea>
+        </div>
+
+        <!-- Paramètres -->
+        <div class="settings-section">
+            <h3>⚙️ Paramètres de Génération</h3>
+            <div class="settings-row">
+                <div class="setting-item">
+                    <label>🎙️ Voix :</label>
+                    <select id="voiceSelect">
+                        <option value="0">Voix Féminine</option>
+                        <option value="1">Voix Masculine</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>⚡ Vitesse : <span class="range-value" id="speedValue">1.0x</span></label>
+                    <input type="range" id="speedRange" min="0.5" max="2" step="0.1" value="1">
+                </div>
+                <div class="setting-item">
+                    <label>⏱️ Durée : <span class="range-value" id="durationValue">15s</span></label>
+                    <input type="range" id="durationRange" min="10" max="60" step="5" value="15">
+                </div>
+            </div>
+        </div>
+
+        <!-- Boutons principaux -->
+        <div class="button-group">
+            <button class="btn-secondary" onclick="openInspiration()">💡 Inspiration</button>
+            <button class="btn-secondary" onclick="showImageSelection()">🎨 Choisir le Style</button>
+            <button class="btn-primary" onclick="generateVideo()" id="generateBtn">🎬 Générer la Vidéo</button>
+        </div>
+
+        <!-- Sélection d'images -->
+        <div class="image-selection" id="imageSelection">
+            <h3>🎨 Choisissez le style visuel de votre vidéo :</h3>
+            <div class="image-grid">
+                <div class="image-option style-realistic" onclick="selectImage(1)">
+                    <div class="image-label">🌟 Réaliste</div>
+                    <div class="checkmark">✓</div>
+                </div>
+                <div class="image-option style-cartoon" onclick="selectImage(2)">
+                    <div class="image-label">🎨 Cartoon</div>
+                    <div class="checkmark">✓</div>
+                </div>
+                <div class="image-option style-anime" onclick="selectImage(3)">
+                    <div class="image-label">✨ Anime</div>
+                    <div class="checkmark">✓</div>
+                </div>
+                <div class="image-option style-3d" onclick="selectImage(4)">
+                    <div class="image-label">🎬 3D Cinématique</div>
+                    <div class="checkmark">✓</div>
+                </div>
+                <div class="image-option style-paint" onclick="selectImage(5)">
+                    <div class="image-label">🖼️ Peinture</div>
+                    <div class="checkmark">✓</div>
+                </div>
+                <div class="image-option style-cyber" onclick="selectImage(6)">
+                    <div class="image-label">🤖 Cyberpunk</div>
+                    <div class="checkmark">✓</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barre de progression -->
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill">0%</div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p id="loadingText">Génération en cours...</p>
+        </div>
+
+        <!-- Aperçu vidéo -->
+        <div class="video-preview" id="videoPreview">
+            <h3>🎉 Votre vidéo est prête !</h3>
+            <div class="video-container">
+                <canvas id="videoCanvas" width="1280" height="720"></canvas>
+                <div class="subtitle-display" id="subtitleDisplay"></div>
+            </div>
+            <div class="audio-control">
+                <audio id="audioPlayer" controls style="width: 100%; max-width: 600px;"></audio>
+            </div>
+            <div class="button-group">
+                <button class="btn-success" onclick="downloadVideo()">⬇️ Télécharger la Vidéo</button>
+                <button class="btn-secondary" onclick="playVideoAgain()">▶️ Rejouer</button>
+                <button class="btn-secondary" onclick="resetForm()">🔄 Nouvelle Vidéo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal d'inspiration -->
+    <div class="inspiration-modal" id="inspirationModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeInspiration()">&times;</span>
+            <h2>💡 Histoires Inspirantes</h2>
+            <p style="color: #666; margin-bottom: 20px;">Choisissez une histoire pour commencer :</p>
+            
+            <div class="story-option" onclick="useStory(0)">
+                <div class="story-title">🚀 L'Explorateur Spatial</div>
+                <p>Un astronaute courageux découvre une planète mystérieuse habitée par des créatures bioluminescentes qui communiquent uniquement par la lumière. Il apprend leur langage et découvre qu'ils gardent un secret ancien sur l'origine de l'univers.</p>
+            </div>
+
+            <div class="story-option" onclick="useStory(1)">
+                <div class="story-title">🌊 Le Royaume Sous-Marin</div>
+                <p>Une jeune plongeuse aventureuse découvre une cité engloutie où les créatures marines ont développé une civilisation avancée. Elle devient l'ambassadrice entre deux mondes et doit empêcher une guerre imminente entre la surface et les profondeurs.</p>
+            </div>
+
+            <div class="story-option" onclick="useStory(2)">
+                <div class="story-title">🌲 La Forêt Enchantée</div>
+                <p>Dans une forêt magique oubliée, les arbres millénaires prennent vie chaque nuit et racontent des histoires anciennes aux voyageurs perdus. Un jeune aventurier découvre que ces récits contiennent des prophéties sur l'avenir du monde.</p>
+            </div>
+
+            <div class="story-option" onclick="useStory(3)">
+                <div class="story-title">🤖 Le Robot avec un Cœur</div>
+                <p>Dans un futur dystopique, un robot défectueux développe des émotions inattendues et entreprend un voyage périlleux pour découvrir ce que signifie vraiment être humain. En chemin, il aide d'autres machines à s'éveiller à la conscience.</p>
+            </div>
+
+            <div class="story-option" onclick="useStory(4)">
+                <div class="story-title">🏰 Le Voyage dans le Temps</div>
+                <p>Un scientifique brillant voyage accidentellement dans le passé et doit corriger les erreurs de l'histoire sans modifier le cours du futur. Chaque changement crée des paradoxes temporels de plus en plus dangereux.</p>
+            </div>
+
+            <div class="story-option" onclick="useStory(5)">
+                <div class="story-title">🐉 Le Dernier Dragon</div>
+                <p>Le dernier dragon du monde émerge de son sommeil millénaire pour protéger les cristaux magiques qui maintiennent l'équilibre entre tous les royaumes. Des chasseurs de trésors sans scrupules menacent de détruire cet équilibre ancien.</p>
+            </div>
+
+            <div class="story-option" onclick="useStory(6)">
+                <div class="story-title">☁️ La Ville dans les Nuages</div>
+                <p>Une cité flottante majestueuse existe au-dessus des nuages, où les habitants ont le pouvoir unique de contrôler la météo avec leurs émotions. Un jeune garçon apprend à maîtriser ses pouvoirs pour sauver la ville d'une tempête émotionnelle dévastatrice.</p>
+            </div>
+
+            <div class="story-option" onclick="useStory(7)">
+                <div class="story-title">🎭 Le Théâtre Vivant</div>
+                <p>Un théâtre abandonné recèle un secret magique : les personnages des pièces prennent vie chaque minuit et rejouent leurs histoires tragiques. Une jeune actrice passionnée découvre qu'elle peut réécrire leurs destins et leur offrir de nouvelles fins.</p>
+            </div>
+
+            <div class="story-option" onclick="useStory(8)">
+                <div class="story-title">🔮 La Bibliothèque Infinie</div>
+                <p>Une bibliothèque mystérieuse contient tous les livres qui n'ont jamais été écrits. Un jeune écrivain découvre qu'il peut 
